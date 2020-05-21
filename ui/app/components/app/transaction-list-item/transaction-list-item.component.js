@@ -33,7 +33,7 @@ export default function TransactionListItem ({ transactionGroup, isEarliestNonce
 
   const isApprove = category === 'approval'
   const isSend = category === 'send'
-  const isReceive = category === 'deposit'
+  const isReceive = category === 'receive'
   const isUnapproved = status === 'unapproved'
   const isPending = status === 'pending'
   const isFailed = status === 'failed'
@@ -155,7 +155,8 @@ export default function TransactionListItem ({ transactionGroup, isEarliestNonce
           senderAddress={senderAddress}
           recipientAddress={recipientAddress}
           onRetry={retryTransaction}
-          showRetry={isEarliestNonce && isPending}
+          showRetry={isFailed}
+          showSpeedUp={isEarliestNonce && isPending}
           isEarliestNonce={isEarliestNonce}
           onCancel={cancelTransaction}
           showCancel={isPending && !hasCancelled}

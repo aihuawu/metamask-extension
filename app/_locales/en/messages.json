@@ -1126,6 +1126,9 @@
   "recents": {
     "message": "Recents"
   },
+  "receive": {
+    "message": "Receive"
+  },
   "recipientAddress": {
     "message": "Recipient Address"
   },
@@ -1305,7 +1308,8 @@
     "message": "sent tokens"
   },
   "sendSpecifiedTokens": {
-    "message": "Send $1"
+    "message": "Send $1",
+    "description": "Symbol of the specified token"
   },
   "separateEachWord": {
     "message": "Separate each word with a single space"

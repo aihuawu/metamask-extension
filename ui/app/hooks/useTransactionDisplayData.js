@@ -17,7 +17,7 @@ import { useTokenData } from './useTokenData'
 import { tokenSelector } from '../selectors'
 
 const SEND = 'send'
-const DEPOSIT = 'deposit'
+const RECEIVE = 'receive'
 const INTERACTION = 'interaction'
 const APPROVAL = 'approval'
 
@@ -78,14 +78,18 @@ export function useTransactionDisplayData (transactionGroup) {
   const tokenData = useTokenData(initialTransaction?.txParams?.data)
   const tokenDisplayValue = useTokenDisplayValue(initialTransaction?.txParams?.data, token)
 
-  let category = SEND
-  let title = t('sendETH')
+  let category
+  let title
   // There are four types of transaction entries that are currently differentiated in the design
   // 1. Send (sendEth sendTokens)
   // 2. Deposit
   // 3. Site interaction
   // 4. Approval
-  if (transactionCategory === 'approve') {
+  if (transactionCategory == null) {
+    category = APPROVAL
+    title = t('signatureRequest')
+    subtitle += ` · ${initialTransaction.origin}`
+  } else if (transactionCategory === 'approve') {
     category = APPROVAL
     title = t('approveSpendLimit')
     subtitle += ` · ${initialTransaction.origin}`
@@ -94,17 +98,18 @@ export function useTransactionDisplayData (transactionGroup) {
     title = (methodData?.name && camelCaseToCapitalize(methodData.name)) || (actionKey && t(actionKey)) || ''
     subtitle += ` · ${initialTransaction.origin}`
   } else if (transactionCategory === 'incoming') {
-    category = DEPOSIT
-    title = t('deposit')
+    category = RECEIVE
+    title = t('receive')
     prefix = ''
     subtitle += ` · From: ${shortenAddress(senderAddress)}`
-  }
-
-  if (transactionCategory === 'transfer') {
+  } else if (transactionCategory === 'transfer') {
+    category = SEND
     title = t('sendSpecifiedTokens', [token?.symbol])
     recipientAddress = getTokenToAddress(tokenData.params)
     subtitle += ` · To: ${shortenAddress(recipientAddress)}`
-  } else if (category === SEND) {
+  } else if (transactionCategory === 'sentEther') {
+    category = SEND
+    title = t('sendETH')
     subtitle += ` · To: ${shortenAddress(recipientAddress)}`
   }
 
